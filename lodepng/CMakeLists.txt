@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.16)
+
+project(lodepng)
+
+add_library(${PROJECT_NAME} SHARED lodepng.c)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER lodepng.h)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_LISTS_DIR})
+
+include(GNUInstallDirs)
+install(TARGETS ${PROJECT_NAME}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
