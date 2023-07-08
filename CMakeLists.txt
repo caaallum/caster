@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(caster)
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(FETCHCONTENT_QUIET OFF)
-
-add_subdirectory(lodepng)
 
 include(FetchContent)
 
@@ -61,21 +57,5 @@ FetchContent_MakeAvailable(cglm glfw glad)
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
-file(GLOB
-    SRC
-    src/main.c)
-
-add_executable(${PROJECT_NAME} ${SRC})
-target_include_directories(${PROJECT_NAME}
-    PRIVATE ${glfw_SOURCE_DIR}/include
-    PRIVATE ${glad_SOURCE_DIR}/include
-    PRIVATE lodepng
-)
-target_link_libraries(${PROJECT_NAME}
-    PRIVATE glfw
-    PRIVATE glad
-    PRIVATE cglm
-    PRIVATE stb
-    PRIVATE lodepng
-)
-
+add_subdirectory(lodepng)
+add_subdirectory(src)

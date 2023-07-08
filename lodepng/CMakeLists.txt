@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(lodepng)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS TRUE)
+
 add_library(${PROJECT_NAME} SHARED lodepng.c)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER lodepng.h)
