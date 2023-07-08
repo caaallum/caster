@@ -1,13 +1,12 @@
 #include "game.h"
+#include <string.h>
+#include <assert.h>
+#include <stdlib.h>
 
 #include "resource_manager.h"
 
-#include <stdlib.h>
-#include <assert.h>
-
 static void 
 game_init(game_t *game) {
-    
     /* Load shaders */
     rm_load_shader("assets/shaders/line.vs", "assets/shaders/line.frag", NULL, "line");
 }
