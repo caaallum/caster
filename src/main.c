@@ -3,6 +3,8 @@
 #include "vector2.h"
 #include <math.h>
 #include "resource_manager.h"
+#include "line.h"
+#include "game.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -65,6 +67,7 @@ int main() {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     rm_init();
+    game_t *game = game_new(SCREEN_WIDTH, SCREEN_HEIGHT);
 
     vector2d_t pos = {22, 12};
     vector2d_t dir = {-1, 0};
@@ -144,6 +147,8 @@ int main() {
             if (draw_end >= SCREEN_HEIGHT) {
                 draw_end = SCREEN_HEIGHT - 1;
             }
+
+            line_draw((vec2){x, draw_start}, (vec2){x, draw_end});
         }
         glfwSwapBuffers(window);
     }
