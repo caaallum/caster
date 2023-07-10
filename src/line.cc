@@ -1,22 +1,32 @@
 #include "line.h"
 #include "resource_manager.h"
 #include <glad/glad.h>
+#include "game.h"
+
+extern Game game;
 
 void
-line_draw(vec2 start, vec2 end) {
+line_draw(glm::vec2 start, glm::vec2 end, glm::vec3 color) {
+    float x1 = 2 * start.x / game.width - 1;
+    float y1 = 2 * start.y / game.height - 1;
+    float x2 = 2 * end.x / game.width - 1;
+    float y2 = 2 * end.y / game.height - 1;
+
     GLfloat vertices[] = {
-        start[0], start[1], 0,
-        end[0], end[1], 0
+        x1, y1, 0,
+        x2, y2, 0
     };
     
-    unsigned int VAO;
+    unsigned int VAO, VBO;
 
     glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
-    shader_t *shader = rm_get_shader("line");
-    shader_use(shader);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) * 9, vertices, GL_STATIC_DRAW);
+    ResourceManager::GetShader("line").use().setVector3("color", color).setMat4("projection", glm::mat4(1.0));
+
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices) * 6, vertices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -24,8 +34,7 @@ line_draw(vec2 start, vec2 end) {
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
     glBindVertexArray(0);
     
-    shader_set_vector3f(shader, "color", (vec3){1.0, 0.0, 0.0});
-
     glBindVertexArray(VAO);
     glDrawArrays(GL_LINES, 0, 2);
+    glDeleteVertexArrays(1, &VAO);
 }
