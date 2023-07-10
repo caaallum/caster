@@ -32,9 +32,9 @@ set(GLAD_ALL_EXTENSIONS OFF CACHE BOOL "Include all extensions instead of those 
 set(GLAD_NO_LOADER      OFF CACHE BOOL "No loader" FORCE)
 set(GLAD_REPRODUCIBLE   OFF CACHE BOOL "Reproducible build" FORCE)
 
-FetchContent_Declare(cglm
-    GIT_REPOSITORY  https://github.com/recp/cglm.git
-    GIT_TAG         v0.9.0
+FetchContent_Declare(glm
+    GIT_REPOSITORY  https://github.com/g-truc/glm.git
+    GIT_TAG         0.9.9.8
     GIT_PROGRESS    TRUE
     GIT_SHALLOW     TRUE
 )
@@ -53,9 +53,10 @@ if (NOT stb_POPULATED)
     target_include_directories(stb INTERFACE ${stb_SOURCE_DIR})
 endif()
 
-FetchContent_MakeAvailable(cglm glfw glad)
+FetchContent_MakeAvailable(glfw glad glm)
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
 add_subdirectory(lodepng)
 add_subdirectory(src)
+add_subdirectory(line)

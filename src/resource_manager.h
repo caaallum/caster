@@ -1,20 +1,33 @@
 #ifndef __RESOURCE_MANAGER_H
 #define __RESOURCE_MANAGER_H
 
-#include "map.h"
+#include <map>
+#include <string>
+
 #include "texture2d.h"
 #include "shader.h"
 
-void rm_init(void);
+class ResourceManager {
+public:
+    static Shader LoadShader(const char *vertexFile, const char *fragmentFile, const char *geometryFile, const char *name);
 
-void rm_destroy(void);
+    static Shader GetShader(const char *name);
 
-shader_t *rm_load_shader(const char *vertex_file, const char *fragment_file, const char *geometry_file, const char *name);
+    static Texture2d LoadTexture(const char *file, bool alpha, const char *name);
 
-texture2d_t *rm_load_texture(const char *file, bool alpha, const char *name);
+    static Texture2d GetTexture(const char *name);
 
-shader_t *rm_get_shader(const char *name);
+    static void Clear();
 
-texture2d_t *rm_get_texture(const char *name);
+private:
+    static std::map<std::string, Shader> shaders;
+    static std::map<std::string, Texture2d> textures;
+
+    ResourceManager() {}
+    
+    static Shader loadShaderFromFile(const char *vertexFile, const char *fragmentFile, const char *geometryFile = nullptr);
+
+    static Texture2d loadTextureFromFile(const char *file, bool alpha);
+};
 
 #endif /* __RESOURCE_MANAGER_H */

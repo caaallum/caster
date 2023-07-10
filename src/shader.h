@@ -1,38 +1,33 @@
 #ifndef __SHADER_H
 #define __SHADER_H
 
-#include <cglm/cglm.h>
+#include <glm/glm.hpp>
 
-typedef struct {
+class Shader {
+public:
+    Shader();
+    ~Shader();
+    
+    Shader& compile(const char *vertex_source, const char *fragment_source, const char *geometry_source = nullptr);
+    Shader& use();
+
+    Shader& setFloat(const char *name, float value);
+
+    Shader& setInt(const char *name, int value);
+
+    Shader& setVector2(const char *name, float x, float y);
+    Shader& setVector2(const char *name, glm::vec2 value);
+
+    Shader& setVector3(const char *name, float x, float y, float z);
+    Shader& setVector3(const char *name, glm::vec3 value);
+
+    Shader& setVector4(const char *name, float x, float y, float z, float w);
+    Shader& setVector4(const char *name, glm::vec4 value);
+
+    Shader& setMat4(const char *name, glm::mat4 value);
+
+private:
     unsigned int ID;
-} shader_t;
-
-shader_t *shader_new(void);
-
-void shader_destroy(shader_t *shader);
-
-void shader_use(shader_t *shader);
-
-void shader_compile(shader_t *shader, const char *vertex_source, const char *fragment_source, const char *geometry_source);
-
-void shader_set_float(shader_t *shader, const char *name, float value);
-
-void shader_set_integer(shader_t *shader, const char *name, int value);
-
-void shader_set_vector2pf(shader_t *shader, const char *name, float x, float y);
-
-void shader_set_vector2f(shader_t *shader, const char *name, vec2 value);
-
-void shader_set_vector3pf(shader_t *shader, const char *name, float x, float y, float z);
-
-void shader_set_vector3f(shader_t *shader, const char *name, vec3 value);
-
-void shader_set_vector4pf(shader_t *shader, const char *name, float x, float y, float z, float w);
-
-void shader_set_vector4f(shader_t *shader, const char *name, vec4 value);
-
-void shader_set_matrix4(shader_t *shader, const char *name, mat4 matrix);
-
-void shader_check_compile_errors(shader_t *shader, unsigned int object, const char *type);
+};
 
 #endif /* __SHADER_H */

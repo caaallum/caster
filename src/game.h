@@ -1,22 +1,19 @@
 #ifndef __GAME_H
 #define __GAME_H
 
-typedef struct _game_t game_t;
+class Game {
+public:
+    bool keys[1024];
+    unsigned int width, height;
 
-struct _game_t {
-    int keys[1024];
+    Game(unsigned int width, unsigned int height);
+    ~Game();
 
-    struct {
-        unsigned int width;
-        unsigned int height;
-    } window;
+    void init();
 
-    void (*process_input)(game_t *this, float dt);
-    void (*update)(game_t *this, float dt);
-    void (*render)(game_t *this);
-    void (*destroy)(game_t *this);
+    void processInput(float dt);
+    void update(float dt);
+    void render();
 };
-
-game_t *game_new(unsigned int width, unsigned int height);
 
 #endif /* __GAME_H */

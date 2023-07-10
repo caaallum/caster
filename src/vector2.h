@@ -1,14 +1,17 @@
 #ifndef __VECTOR2_H
 #define __VECTOR2_H
 
-typedef struct {
-    double x;
-    double y;
-} vector2d_t;
+template <typename T>
+class Vector2 {
+public:
+    T x, y;
 
-typedef struct {
-    int x;
-    int y;
-} vector2i_t;
+    explicit Vector2() : x(0), y(x) {}
+    
+    Vector2(T x, T y) : x(x), y(y) {}
+
+    template<typename U>
+    Vector2(U x, U y) : x(static_cast<T>(x)), y(static_cast<T>(y)) {}
+};
 
 #endif /* __VECTOR2_H */

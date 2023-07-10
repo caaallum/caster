@@ -1,8 +1,18 @@
 #ifndef __TEXTURE2D_H
 #define __TEXTURE2D_H
 
-typedef struct {
+class Texture2d {
+public:
+    Texture2d();
+    ~Texture2d();
+
+    void bind();
+
+    void generate(unsigned int width, unsigned int height, unsigned char *data);
+
+private:
     unsigned int ID;
+public:
     unsigned int width;
     unsigned int height;
     unsigned int internal_format;
@@ -11,14 +21,6 @@ typedef struct {
     unsigned int wrap_t;
     unsigned int filter_min;
     unsigned int filter_max;
-} texture2d_t;
-
-texture2d_t *texture2d_new(void);
-
-void texture2d_destroy(texture2d_t *texture);
-
-void texture2d_generate(texture2d_t *texture, unsigned int width, unsigned int height, unsigned char *data);
-
-void texture2d_bind(texture2d_t *texture);
+};
 
 #endif /* __TEXTURE2D_H */

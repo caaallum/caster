@@ -5,7 +5,7 @@ project(caster)
 file(GLOB
     SRC
 
-    *.c
+    *.cc
     *.h
 )
 
@@ -18,7 +18,7 @@ target_include_directories(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME}
     PRIVATE glfw
     PRIVATE glad
-    PRIVATE cglm
+    PRIVATE glm
     PRIVATE stb
     PRIVATE lodepng
 )
