@@ -1,9 +1,10 @@
 #include "game.h"
-#include "resource_manager.h"
+#include "line.h"
 #include "vector2.h"
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <math.h>
+#include <stdio.h>
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
@@ -74,7 +75,6 @@ int main() {
 
   double time = 0;
   double old_time = 0;
-
 
     game.init();
 
@@ -147,6 +147,20 @@ int main() {
       if (draw_end >= SCREEN_HEIGHT) {
         draw_end = SCREEN_HEIGHT - 1;
       }
+        glm::vec3 color(0);
+            switch(world_map[map.x][map.y]) {
+                case 1: color.x = 1; break; // Red
+                case 2: color.y = 1; break; // Green
+                case 3: color.z = 1; break; // Blue
+                case 4: color.x = 1; color.y = 1; color.z = 1; break;
+                default: color.x = 1; color.y = 1; break;
+            }
+            if (side == 1) {
+                color.x /= 2;
+                color.y /= 2;
+                color.z /= 2;
+            }
+        line_draw({x, draw_start}, {x, draw_end}, color);
     }
     glfwSwapBuffers(window);
   }
