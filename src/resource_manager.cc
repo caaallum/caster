@@ -10,6 +10,7 @@
 
 std::map<std::string, Texture2d> ResourceManager::textures;
 std::map<std::string, Shader> ResourceManager::shaders;
+std::map<std::string, Map> ResourceManager::maps;
 
 Shader
 ResourceManager::LoadShader(const char *vertexFile, const char *fragmentFile, const char *geometryFile, const char *name) {
@@ -31,6 +32,17 @@ ResourceManager::LoadTexture(const char *file, bool alpha, const char *name) {
 Texture2d
 ResourceManager::GetTexture(const char *name) {
     return textures[name];
+}
+
+Map
+ResourceManager::LoadMap(const char *file, const char *name) {
+    maps[name] = loadMapFromFile(file);
+    return maps[name];
+}
+
+Map
+ResourceManager::GetMap(const char *name) {
+    return maps[name];
 }
 
 Shader
@@ -87,4 +99,23 @@ ResourceManager::loadTextureFromFile(const char *file, bool alpha) {
 
     stbi_image_free(data);
     return texture;
+}
+
+Map 
+ResourceManager::loadMapFromFile(const char *file) {
+    std::ifstream mapFile(file);
+    std::string line;
+    std::vector<std::vector<int>> data;
+
+    while (std::getline(mapFile, line)) {
+        std::stringstream ssline(line);
+        std::string c;
+        std::vector<int> row;
+        while (std::getline(ssline, c, ' ')) {
+            row.push_back(std::atoi(c.c_str()));
+        }
+        data.push_back(row);
+    }
+
+    return Map(data);
 }
