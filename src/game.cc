@@ -16,11 +16,15 @@ void Game::init() {
                               "assets/shaders/line.frag", NULL, "line");
 
   /* Maps */
-  ResourceManager::LoadMap("assets/map/default.map", "default");
+    ResourceManager::LoadMap("assets/map/default.map", "default");
 }
 
-void Game::update(float dt) {}
+void Game::update(float dt) {
+
+}
 
 void Game::processInput(float dt) {}
 
-void Game::render() {}
+void Game::render() {
+    ResourceManager::GetMap("default").draw();
+}
