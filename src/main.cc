@@ -5,38 +5,13 @@
 #include <GLFW/glfw3.h>
 #include <math.h>
 #include <stdio.h>
+#include "resource_manager.h"
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
 #define MAP_WIDTH 24
 #define MAP_HEIGHT 24
-
-int world_map[MAP_WIDTH][MAP_HEIGHT] = {
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 2, 2, 0, 2, 2, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 4, 0, 0, 0, 0, 5, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 4, 0, 4, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 4, 0, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
 Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -76,7 +51,7 @@ int main() {
   double time = 0;
   double old_time = 0;
 
-    game.init();
+  game.init();
 
   while (!glfwWindowShouldClose(window)) {
     glfwPollEvents();
@@ -84,84 +59,8 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    for (int x = 0; x < SCREEN_WIDTH; x++) {
-      double camera = 2 * x / (double)SCREEN_WIDTH - 1;
-      Vector2<double> ray_dir = {dir.x + plane.x * camera,
-                                 dir.y + plane.y * camera};
-
-      Vector2<int> map = {(int)pos.x, (int)pos.y};
-      Vector2<double> side_dist = {0, 0};
-
-      Vector2<double> delta_dist = {
-          (ray_dir.x == 0) ? 1e30 : fabs(1 / ray_dir.x),
-          (ray_dir.y == 0) ? 1e30 : fabs(1 / ray_dir.y)};
-      double perp_wall_dist;
-
-      Vector2<int> step;
-
-      int hit = 0;
-      int side;
-
-      if (ray_dir.x < 0) {
-        step.x = -1;
-        side_dist.x = (pos.x - map.x) * delta_dist.x;
-      } else {
-        step.x = 1;
-        side_dist.x = (map.x + 1.0 - pos.x) * delta_dist.x;
-      }
-      if (ray_dir.y < 0) {
-        step.y = -1;
-        side_dist.y = (pos.y - map.y) * delta_dist.y;
-      } else {
-        step.y = 1;
-        side_dist.y = (map.y + 1.0 - pos.y) * delta_dist.y;
-      }
-
-      while (hit == 0) {
-        if (side_dist.x < side_dist.y) {
-          side_dist.x += delta_dist.x;
-          map.x += step.x;
-          side = 0;
-        } else {
-          side_dist.y += delta_dist.y;
-          map.y += step.y;
-          side = 1;
-        }
-        if (world_map[map.x][map.y] > 0)
-          hit = 1;
-      }
-
-      if (side == 0) {
-        perp_wall_dist = (side_dist.x - delta_dist.x);
-      } else {
-        perp_wall_dist = (side_dist.y - delta_dist.y);
-      }
-
-      int line_height = (int)(SCREEN_HEIGHT / perp_wall_dist);
-
-      int draw_start = -line_height / 2 + SCREEN_HEIGHT / 2;
-      if (draw_start < 0) {
-        draw_start = 0;
-      }
-      int draw_end = line_height / 2 + SCREEN_HEIGHT / 2;
-      if (draw_end >= SCREEN_HEIGHT) {
-        draw_end = SCREEN_HEIGHT - 1;
-      }
-        glm::vec3 color(0);
-            switch(world_map[map.x][map.y]) {
-                case 1: color.x = 1; break; // Red
-                case 2: color.y = 1; break; // Green
-                case 3: color.z = 1; break; // Blue
-                case 4: color.x = 1; color.y = 1; color.z = 1; break;
-                default: color.x = 1; color.y = 1; break;
-            }
-            if (side == 1) {
-                color.x /= 2;
-                color.y /= 2;
-                color.z /= 2;
-            }
-        line_draw({x, draw_start}, {x, draw_end}, color);
-    }
+    ResourceManager::GetMap("default").draw();
+   
     glfwSwapBuffers(window);
   }
 
