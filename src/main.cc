@@ -1,5 +1,4 @@
 #include "game.h"
-#include "line.h"
 #include "vector2.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -59,7 +58,7 @@ int main() {
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    ResourceManager::GetMap("default").draw();
+    game.render();
    
     glfwSwapBuffers(window);
   }
@@ -74,6 +73,15 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action,
   if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, GL_TRUE);
   }
+
+    if (key >= 0 && key < 1024) {
+        if (action == GLFW_PRESS) {
+            game.keys[key] = true;
+        }
+        else if (action == GLFW_RELEASE) {
+            game.keys[key] = false;
+        }
+    }
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
