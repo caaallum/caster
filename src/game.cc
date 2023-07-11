@@ -11,8 +11,12 @@ Game::Game(unsigned int width, unsigned int height)
 Game::~Game() {}
 
 void Game::init() {
+  /* Shaders */
   ResourceManager::LoadShader("assets/shaders/line.vs",
                               "assets/shaders/line.frag", NULL, "line");
+
+  /* Maps */
+  ResourceManager::LoadMap("assets/map/default.map", "default");
 }
 
 void Game::update(float dt) {}
