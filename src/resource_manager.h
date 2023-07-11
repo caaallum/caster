@@ -18,8 +18,6 @@ public:
     static Texture2d GetTexture(const char *name);
     static Map GetMap(const char *name);
 
-    static void Clear();
-
 private:
     static std::map<std::string, Shader> shaders;
     static std::map<std::string, Texture2d> textures;

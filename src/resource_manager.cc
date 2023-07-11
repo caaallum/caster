@@ -107,14 +107,17 @@ ResourceManager::loadMapFromFile(const char *file) {
     std::string line;
     std::vector<std::vector<int>> data;
 
-    while (std::getline(mapFile, line)) {
-        std::stringstream ssline(line);
-        std::string c;
-        std::vector<int> row;
-        while (std::getline(ssline, c, ' ')) {
-            row.push_back(std::atoi(c.c_str()));
+    if (mapFile.is_open()) {
+        while (std::getline(mapFile, line)) {
+            std::stringstream ssline(line);
+            std::string c;
+            std::vector<int> row;
+            while (std::getline(ssline, c, ' ')) {
+                row.push_back(std::atoi(c.c_str()));
+            }
+            data.push_back(row);
         }
-        data.push_back(row);
+        mapFile.close();
     }
 
     return Map(data);
