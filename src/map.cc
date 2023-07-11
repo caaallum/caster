@@ -2,6 +2,8 @@
 #include "game.h"
 #include <glm/glm.hpp>
 #include "line.h"
+#include <GLFW/glfw3.h>
+#include <iostream>
 
 extern Game game;
 
@@ -9,7 +11,11 @@ Map::Map(std::vector<std::vector<int>> map) :
     m_map(map),
     m_pos(22, 12),
     m_dir(-1, 0),
-    m_plane(0, 0.66) {
+    m_plane(0, 0.66),
+    m_time(0),
+    m_old_time(0),
+    m_move_speed(0),
+    m_rot_speed(0) {
     
 }
 
@@ -20,8 +26,8 @@ Map::draw() {
       Vector2<double> ray_dir = {m_dir.x + m_plane.x * camera,
                                  m_dir.y + m_plane.y * camera};
 
-      Vector2<int> map = {(int)m_pos.x, (int)m_pos.y};
-      Vector2<double> side_dist = {0, 0};
+      Vector2<int> map(m_pos);
+      Vector2<double> side_dist;
 
       Vector2<double> delta_dist = {
           (ray_dir.x == 0) ? 1e30 : fabs(1 / ray_dir.x),
@@ -93,4 +99,57 @@ Map::draw() {
         }
         line_draw({x, draw_start}, {x, draw_end}, color);
     }
+    m_old_time = m_time;
+    m_time = glfwGetTime();
+
+    double frame_time = (m_time - m_old_time) / 100.0;
+    m_move_speed = frame_time * 5.0;
+    m_rot_speed = frame_time * 3.0;
+    if (game.keys[GLFW_KEY_UP]) {
+
+        if (m_map[int(m_pos.x + m_dir.x * m_move_speed)][int(m_pos.y)] == 0) {
+            m_pos.x += m_dir.x * m_move_speed;
+        }
+        if (m_map[int(m_pos.x)][int(m_pos.y + m_dir.y * m_move_speed)] == 0) {
+            m_pos.y += m_dir.y * m_move_speed;
+        }
+        std::cout << m_map[int(m_pos.x + m_dir.x * m_move_speed)][int(m_pos.y)] << " " << m_pos.x << " " << '\n';
+    }
+}
+
+
+void 
+Map::moveForward() {
+}
+
+void
+Map::moveBackward() {
+    if (m_map[int(m_pos.x - m_dir.x * m_move_speed)][int(m_pos.y)] == 0) {
+        m_pos.x -= m_dir.x * m_move_speed;
+    }
+    if (m_map[int(m_pos.x)][int(m_pos.y - m_dir.y * m_move_speed)] == 0) {
+        m_pos.y -= m_dir.y * m_move_speed;
+    }
+}
+
+void
+Map::moveRight() {
+    double old_dir = m_dir.x;
+    m_dir.x = m_dir.x * cos(-m_rot_speed) - m_dir.y * sin(-m_rot_speed);
+    m_dir.y = old_dir * sin(-m_rot_speed) + m_dir.y * cos(-m_rot_speed);
+
+    double old_plane = m_plane.x;
+    m_plane.x = m_plane.x * cos(-m_rot_speed) - m_plane.y * sin(-m_rot_speed);
+    m_plane.y = old_plane * sin(-m_rot_speed) + m_plane.y * cos(-m_rot_speed);
+}
+
+void
+Map::moveLeft() {
+    double old_dir = m_dir.x;
+    m_dir.x = m_dir.x * cos(m_rot_speed) - m_dir.y * sin(m_rot_speed);
+    m_dir.y = old_dir * sin(m_rot_speed) + m_dir.y * cos(m_rot_speed);
+
+    double old_plane = m_plane.x;
+    m_plane.x = m_plane.x * cos(m_rot_speed) - m_plane.y * sin(m_rot_speed);
+    m_plane.y = old_plane * sin(m_rot_speed) + m_plane.y * cos(m_rot_speed);
 }
