@@ -39,6 +39,13 @@ FetchContent_Declare(glm
     GIT_SHALLOW     TRUE
 )
 
+FetchContent_Declare(cglm
+    GIT_REPOSITORY  https://github.com/recp/cglm.git
+    GIT_TAG         v0.9.0
+    GIT_PROGRESS    TRUE
+    GIT_SHALLOW     TRUE
+)
+
 FetchContent_Declare(stb
     GIT_REPOSITORY https://github.com/nothings/stb.git
     GIT_TAG master
@@ -53,9 +60,10 @@ if (NOT stb_POPULATED)
     target_include_directories(stb INTERFACE ${stb_SOURCE_DIR})
 endif()
 
-FetchContent_MakeAvailable(glfw glad glm)
+FetchContent_MakeAvailable(glfw glad glm cglm)
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
 add_subdirectory(lodepng)
-add_subdirectory(src)
+add_subdirectory(casterxx)
+add_subdirectory(caster)
