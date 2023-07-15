@@ -3,6 +3,7 @@
 
 #include "texture2d.h"
 #include "shader.h"
+#include "level.h"
 
 /**********************************************************
  * \brief Initialize Resource Manager
@@ -38,7 +39,17 @@ shader_t *rm_load_shader(const char *vertex_file, const char *fragment_file, con
 texture2d_t *rm_load_texture(const char *file, bool alpha, const char *name);
 
 /**********************************************************
- * \brief Load shader from resource manager
+ * \brief Load level into Resource Manager
+ *
+ * \param file              path to level file
+ * \param name              key to define
+ *
+ * \returns level_t * from Resource Manager
+ **********************************************************/
+level_t *rm_load_level(const char *file, const char *name);
+
+/**********************************************************
+ * \brief Load shader from Resource Manager
  *
  * \param name              key
  *
@@ -47,12 +58,21 @@ texture2d_t *rm_load_texture(const char *file, bool alpha, const char *name);
 shader_t *rm_get_shader(const char *name);
 
 /**********************************************************
- * \brief Load texture from resource manager
+ * \brief Load texture from Resource Manager
  *
  * \param name              key
  *
  * \returns texture2d_t * from Resource Manager
  **********************************************************/
 texture2d_t *rm_get_texture(const char *name);
+
+/**********************************************************
+ * \brief Load level from Resource Manager
+ *
+ * \param name              key
+ *
+ * \returns level_t * from Resource Manager
+ **********************************************************/
+level_t *rm_get_level(const char *name);
 
 #endif /* __RESOURCE_MANAGER_H */

@@ -1,6 +1,8 @@
 #ifndef __GAME_H
 #define __GAME_H
 
+#include "level.h"
+
 typedef struct _game_t game_t;
 
 struct _game_t {
@@ -10,6 +12,8 @@ struct _game_t {
         unsigned int width;
         unsigned int height;
     } window;
+
+    level_t *level;
 
     void (*process_input)(game_t *this, float dr);
     void (*update)(game_t *this, float dt);

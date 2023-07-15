@@ -4,20 +4,24 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "map.h"
+#include <stdio.h>
 
 static map_t *shaders;
 static map_t *textures;
+static map_t *levels;
 
 void
 rm_init(void) {
     shaders = map_new();
     textures = map_new();
+    levels = map_new();
 }
 
 void
 rm_destroy(void) {
     map_destroy(shaders);
     map_destroy(textures);
+    map_destroy(levels);
 }
 
 static shader_t *
@@ -89,6 +93,46 @@ rm_load_texture(const char *file, bool alpha, const char *name) {
     return map_get(textures, name);
 }
 
+static level_t *
+rm_load_level_from_file(const char *file) {
+    level_t *level = level_new();    
+    FILE *fp;
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
+    char *pch;
+
+    fp = fopen(file, "r");
+    if (fp == NULL) {
+        return level;
+    }
+
+    while ((read = getline(&line, &len, fp)) != -1) {
+        pch = strtok(line, " ");
+        
+        while (pch != NULL) {
+            int i = atoi(pch);
+            vector_pushback(level->map.d, &i, sizeof(int));
+            pch = strtok(NULL, " ");
+        }
+    }
+
+    fclose(fp);
+    if (line) {
+        free(line);
+    }
+
+    return level;
+}
+
+level_t *
+rm_load_level(const char *file, const char *name) {
+    level_t *level = rm_load_level_from_file(file);
+    map_add(levels, name, level);
+
+    return map_get(levels, name);
+}
+
 shader_t *
 rm_get_shader(const char *name) {
     return map_get(shaders, name);
@@ -98,3 +142,9 @@ texture2d_t *
 rm_get_texture(const char *name) {
     return map_get(textures, name);
 }
+
+level_t *
+rm_get_level(const char *name) {
+    return map_get(levels, name);
+}
+

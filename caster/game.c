@@ -8,6 +8,13 @@
 #include <GLFW/glfw3.h>
 
 static void game_init(game_t *game) {
+    /* Shaders */
+    rm_load_shader("assets/shaders/line.vs", "assets/shaders/line.frag", NULL, "line");
+
+    /* Levels */
+    rm_load_level("assets/map/default.map", "default");
+
+    game->level = rm_get_level("default");
 }
 
 void game_destroy(game_t *game) { 
@@ -21,6 +28,7 @@ void game_update(game_t *game, float dt) {
 }
 
 void game_render(game_t *game) {
+    game->level->draw(game->level, 0);
 }
 
 game_t *
