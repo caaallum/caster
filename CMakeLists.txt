@@ -65,5 +65,4 @@ FetchContent_MakeAvailable(glfw glad glm cglm)
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 
 add_subdirectory(lodepng)
-add_subdirectory(casterxx)
 add_subdirectory(caster)
