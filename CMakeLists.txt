@@ -32,12 +32,14 @@ set(GLAD_ALL_EXTENSIONS OFF CACHE BOOL "Include all extensions instead of those 
 set(GLAD_NO_LOADER      OFF CACHE BOOL "No loader" FORCE)
 set(GLAD_REPRODUCIBLE   OFF CACHE BOOL "Reproducible build" FORCE)
 
-FetchContent_Declare(glm
-    GIT_REPOSITORY  https://github.com/g-truc/glm.git
-    GIT_TAG         0.9.9.8
+FetchContent_Declare(cjson
+    GIT_REPOSITORY  https://github.com/DaveGamble/cJSON.git
+    GIT_TAG         v1.7.16
     GIT_PROGRESS    TRUE
     GIT_SHALLOW     TRUE
 )
+# set(ENABLE_CJSON_UTILS  ON  CACHE BOOL "Enable cJSON utils" FORCE)
+set(ENABLE_CJSON_TEST   OFF CACHE BOOL "Disable cJSON tests" FORCE)
 
 FetchContent_Declare(cglm
     GIT_REPOSITORY  https://github.com/recp/cglm.git
@@ -60,7 +62,7 @@ if (NOT stb_POPULATED)
     target_include_directories(stb INTERFACE ${stb_SOURCE_DIR})
 endif()
 
-FetchContent_MakeAvailable(glfw glad glm cglm)
+FetchContent_MakeAvailable(glfw glad cglm cjson)
 
 file(COPY assets DESTINATION ${CMAKE_BINARY_DIR})
 

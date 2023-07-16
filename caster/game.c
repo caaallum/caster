@@ -8,6 +8,8 @@
 #include <GLFW/glfw3.h>
 
 static void game_init(game_t *game) {
+    rm_init();
+
     /* Shaders */
     rm_load_shader("assets/shaders/line.vs", "assets/shaders/line.frag", NULL, "line");
 
@@ -25,10 +27,11 @@ void game_process_input(game_t *game, float dt) {
 }
 
 void game_update(game_t *game, float dt) {
+    game->level->update(game->level, dt);
 }
 
 void game_render(game_t *game) {
-    game->level->draw(game->level, 0);
+    game->level->draw(game->level);
 }
 
 game_t *
@@ -37,7 +40,7 @@ game_new(unsigned int width, unsigned int height) {
     assert(game);
     game->window.width = width;
     game->window.height = height;
-    memset(game->keys, 0, 1024);
+    memset(game->keys, 0, 1024 * sizeof(int));
     
     game->process_input = game_process_input;
     game->update = game_update;

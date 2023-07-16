@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME} ${SRC})
 target_include_directories(${PROJECT_NAME}
     PRIVATE ${glfw_SOURCE_DIR}/include
     PRIVATE ${glad_SOURCE_DIR}/include
+    PRIVATE ${cjson_SOURCE_DIR}
     PRIVATE lodepng
 )
 target_link_libraries(${PROJECT_NAME}
@@ -21,4 +22,5 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE cglm
     PRIVATE stb
     PRIVATE lodepng
+    PRIVATE cjson
 )

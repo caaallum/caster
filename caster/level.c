@@ -4,11 +4,12 @@
 #include "game.h"
 #include <math.h>
 #include "line.h"
+#include <GLFW/glfw3.h>
 
 extern game_t *game;
 
 static void
-draw(level_t *this, float dt) {
+draw(level_t *this) {
     for (int x = 0; x < game->window.width; x++) {
         double camera = 2 * x / (double)game->window.width - 1;
         vec2 ray_dir = {
@@ -101,7 +102,46 @@ draw(level_t *this, float dt) {
 
 static void
 update(level_t *this, float dt) {
+    double move_speed = dt * 5.0;
+    double rot_speed = dt * 3.0;
 
+    if (game->keys[GLFW_KEY_UP] || game->keys[GLFW_KEY_W]) {
+        if (*(int *)vector_get(this->map.d, ((int)(this->pos[0] + this->dir[0] * move_speed)) * this->map.w + (int)this->pos[1]) == 0) {
+            this->pos[0] += this->dir[0] * move_speed;
+        }
+        if (*(int *)vector_get(this->map.d, (int)this->pos[0] * this->map.w + ((int)(this->pos[1] + this->dir[1] * move_speed))) == 0) {
+            this->pos[1] += this->dir[1] * move_speed;
+        }
+    }
+
+    if (game->keys[GLFW_KEY_DOWN] || game->keys[GLFW_KEY_S]) {
+        if (*(int *)vector_get(this->map.d, ((int)(this->pos[0] - this->dir[0] * move_speed)) * this->map.w + (int)this->pos[1]) == 0) {
+            this->pos[0] -= this->dir[0] * move_speed;
+        }
+        if (*(int *)vector_get(this->map.d, (int)this->pos[0] * this->map.w + ((int)(this->pos[1] - this->dir[1] * move_speed))) == 0) {
+            this->pos[1] -= this->dir[1] * move_speed;
+        }
+    }
+
+    if (game->keys[GLFW_KEY_RIGHT] || game->keys[GLFW_KEY_D]) {
+        double old_dir = this->dir[0];
+        this->dir[0] = this->dir[0] * cos(-rot_speed) - this->dir[1] * sin(-rot_speed);
+        this->dir[1] = old_dir * sin(-rot_speed) + this->dir[1] * cos(rot_speed);
+
+        double old_plane = this->plane[0];
+        this->plane[0] = this->plane[0] * cos(-rot_speed) - this->plane[1] * sin(-rot_speed);
+        this->plane[1] = old_plane * sin(-rot_speed) + this->plane[1] * cos(-rot_speed);
+    }
+
+    if (game->keys[GLFW_KEY_LEFT] || game->keys[GLFW_KEY_A]) {
+        double old_dir = this->dir[0];
+        this->dir[0] = this->dir[0] * cos(rot_speed) - this->dir[1] * sin(rot_speed);
+        this->dir[1] = old_dir * sin(rot_speed) + this->dir[1] * cos(rot_speed);
+
+        double old_plane = this->plane[0];
+        this->plane[0] = this->plane[0] * cos(rot_speed) - this->plane[1] * sin(rot_speed);
+        this->plane[1] = old_plane * sin(rot_speed) + this->plane[1] * cos(rot_speed);
+    }
 }
 
 level_t *

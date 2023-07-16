@@ -17,7 +17,7 @@ struct _level_t {
         vector_t *d;
     } map;
 
-    void (*draw)(level_t *this, float dt);
+    void (*draw)(level_t *this);
     void (*update)(level_t *this, float dt);
 };
 

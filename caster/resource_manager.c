@@ -5,6 +5,7 @@
 #include <stb_image.h>
 #include "map.h"
 #include <stdio.h>
+#include <cJSON.h>
 
 static map_t *shaders;
 static map_t *textures;
@@ -95,33 +96,43 @@ rm_load_texture(const char *file, bool alpha, const char *name) {
 
 static level_t *
 rm_load_level_from_file(const char *file) {
-    level_t *level = level_new();    
-    FILE *fp;
-    char *line = NULL;
-    size_t len = 0;
-    ssize_t read;
-    char *pch;
+    level_t *level = level_new();
+    const cJSON *map = NULL;
+    cJSON *mapi = NULL;
+    const cJSON *width = NULL;
+    const cJSON *height = NULL;
+    char *file_data = NULL;
 
-    fp = fopen(file, "r");
-    if (fp == NULL) {
-        return level;
-    }
+    io_read_file(file, &file_data);
 
-    while ((read = getline(&line, &len, fp)) != -1) {
-        pch = strtok(line, " ");
-        
-        while (pch != NULL) {
-            int i = atoi(pch);
-            vector_pushback(level->map.d, &i, sizeof(int));
-            pch = strtok(NULL, " ");
+    cJSON *json = cJSON_Parse(file_data);
+    if (json == NULL) {
+        const char *error_ptr = cJSON_GetErrorPtr();
+        if (error_ptr != NULL) {
+            fprintf(stderr, "Error before: %s\n", error_ptr);
         }
+        goto end;
     }
 
-    fclose(fp);
-    if (line) {
-        free(line);
+    width = cJSON_GetObjectItem(json, "width");
+    if (cJSON_IsNumber(width)) {
+        level->map.w = width->valueint;
     }
 
+    height = cJSON_GetObjectItem(json, "height");
+    if (cJSON_IsNumber(height)) {
+        level->map.h = height->valueint;
+    }
+
+    map = cJSON_GetObjectItem(json, "map");
+    cJSON_ArrayForEach(mapi, map) {
+        vector_pushback(level->map.d, &mapi->valueint, sizeof(int));
+    }
+end:
+    cJSON_Delete(json);
+    if (file_data) {
+        free(file_data);
+    }
     return level;
 }
 
